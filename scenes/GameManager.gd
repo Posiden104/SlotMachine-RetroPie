@@ -60,6 +60,10 @@ var images: Array
 var fixed: bool
 var locked: bool
 
+var pulls: float = 0
+var wins: float = 0
+var win_target: float = 0.25
+
 func _ready():
 	images.push_back(bell)
 	images.push_back(cherry)
@@ -82,6 +86,7 @@ func _ready():
 	
 	SignalBus.connect("bet_changed", self, "bet_changed")
 
+
 func _physics_process(delta):
 	if Input.is_action_just_pressed("fixit") and state == spinner_state.STOPPED and not locked:
 		fixed = true
@@ -100,8 +105,10 @@ func _physics_process(delta):
 			emit_signal("stopping")
 			pull_timer = 0
 
+
 func lock_wheel(lock: bool):
 	locked = lock
+
 
 func bet_changed():
 	bet = bet + 1
@@ -109,30 +116,51 @@ func bet_changed():
 		bet = 1
 	SignalBus.emit_signal("bet_updated", bet)
 
+
+func get_win_percent():
+	if pulls == 0:
+		return 0
+	return wins / pulls
+
+
+func should_fix():
+	return get_win_percent() < win_target
+
+
 func start_spin(fix: bool):
 		state = spinner_state.SPINNING
 		l_stop = false
 		m_stop = false
 		r_stop = false
-		emit_signal("spinning", fix, 8)
+		if fix:
+			emit_signal("spinning", fix, 13)
+		else:
+			emit_signal("spinning", should_fix(), randi() % credit_image_limits[bet - 1])
 		spin_time = rand_range(2.0, 4.0)
+		pulls += 1
+
 
 func stop():
 	state = spinner_state.STOPPED
-	emit_signal("stopped")
-	
 	check_win()
+
 
 func check_win():
 	if l_idx == m_idx and m_idx == r_idx:
-		if l_idx == 9:
+		wins += 1
+		emit_signal("stopped")
+		if l_idx == 13:
 			emit_signal("win", win_type.BIG)
 		else:
 			emit_signal("win", win_type.NORMAL)
+	emit_signal("stopped")
+
+
 
 func check_stop():
 	if l_stop and m_stop and r_stop:
 		stop()
+
 
 func spinner_stop(spinner: String, img_idx: int):
 	if spinner.to_lower() == "left":
@@ -146,7 +174,8 @@ func spinner_stop(spinner: String, img_idx: int):
 		r_idx = img_idx
 	
 	check_stop()
-	
+
+
 func pick_image_index(_spinner: String, is_final: bool) -> int:
 	var image_idx = randi() % credit_image_limits[bet - 1]
 	return image_idx

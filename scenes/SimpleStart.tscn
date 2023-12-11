@@ -146,5 +146,17 @@ __meta__ = {
 "_edit_use_anchors_": true
 }
 
+[node name="Win Percent Label" type="Label" parent="Dev Label Container"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -729.0
+margin_top = 43.0
+margin_right = -354.0
+margin_bottom = 265.0
+theme = ExtResource( 8 )
+text = "Pulls: 0
+Wins: 0
+Percent: 0"
+
 [connection signal="finished" from="AudioManager/SoundPlayer" to="AudioManager" method="_on_SoundPlayer_finished"]
 [connection signal="pressed" from="BetButton" to="InputManager" method="_on_BetButton_pressed"]
