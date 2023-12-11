@@ -1,0 +1,148 @@
+[gd_scene load_steps=15 format=2]
+
+[ext_resource path="res://images/spin.png" type="Texture" id=1]
+[ext_resource path="res://images/spin_pressed.png" type="Texture" id=2]
+[ext_resource path="res://images/bet.png" type="Texture" id=3]
+[ext_resource path="res://scenes/Spinner.tscn" type="PackedScene" id=4]
+[ext_resource path="res://images/paylineframe.png" type="Texture" id=5]
+[ext_resource path="res://images/bet_pressed.png" type="Texture" id=6]
+[ext_resource path="res://images/SMFrame_blank.png" type="Texture" id=7]
+[ext_resource path="res://main_theme.tres" type="Theme" id=8]
+[ext_resource path="res://scenes/InputManager.gd" type="Script" id=9]
+[ext_resource path="res://scenes/AudioManager.gd" type="Script" id=11]
+
+[sub_resource type="InputEventAction" id=1]
+action = "spin"
+
+[sub_resource type="ShortCut" id=2]
+shortcut = SubResource( 1 )
+
+[sub_resource type="InputEventAction" id=3]
+action = "bet"
+
+[sub_resource type="ShortCut" id=4]
+shortcut = SubResource( 3 )
+
+[node name="SimpleStart" type="Node2D"]
+
+[node name="InputManager" type="Node2D" parent="."]
+script = ExtResource( 9 )
+
+[node name="AudioManager" type="Node2D" parent="."]
+script = ExtResource( 11 )
+
+[node name="SoundPlayer" type="AudioStreamPlayer" parent="AudioManager"]
+
+[node name="SmFrameBlank" type="Sprite" parent="."]
+position = Vector2( 782, 446 )
+scale = Vector2( 3, 3 )
+texture = ExtResource( 7 )
+
+[node name="Left" parent="." instance=ExtResource( 4 )]
+unique_name_in_owner = true
+position = Vector2( 560, 414.5 )
+seconds_for_each_image = 0.01
+slow_target = 0.4
+slow_speed = 1.2
+pos = "Left"
+
+[node name="Middle" parent="." instance=ExtResource( 4 )]
+unique_name_in_owner = true
+position = Vector2( 782, 414.5 )
+seconds_for_each_image = 0.01
+slow_target = 1.0
+slow_speed = 1.05
+pos = "Middle"
+
+[node name="Right" parent="." instance=ExtResource( 4 )]
+unique_name_in_owner = true
+position = Vector2( 1004, 414.5 )
+seconds_for_each_image = 0.01
+slow_target = 1.5
+slow_speed = 1.02
+pos = "Right"
+
+[node name="Paylineframe" type="Sprite" parent="."]
+position = Vector2( 783.5, 416 )
+scale = Vector2( 3, 3 )
+texture = ExtResource( 5 )
+
+[node name="SpinButton" type="TextureButton" parent="."]
+margin_left = 787.0
+margin_top = 527.0
+margin_right = 819.0
+margin_bottom = 548.0
+rect_scale = Vector2( 3, 3 )
+shortcut = SubResource( 2 )
+texture_normal = ExtResource( 1 )
+texture_pressed = ExtResource( 2 )
+
+[node name="BetButton" type="TextureButton" parent="."]
+margin_left = 682.0
+margin_top = 527.0
+margin_right = 715.0
+margin_bottom = 549.0
+rect_scale = Vector2( 3, 3 )
+shortcut = SubResource( 4 )
+texture_normal = ExtResource( 3 )
+texture_pressed = ExtResource( 6 )
+
+[node name="BetLabel" type="Label" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 237.0
+margin_top = 377.0
+margin_right = 422.0
+margin_bottom = 449.0
+theme = ExtResource( 8 )
+text = "Bet: 3"
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="Dev Label Container" type="Node" parent="."]
+
+[node name="Input Label" type="Label" parent="Dev Label Container"]
+visible = false
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -499.0
+margin_top = 36.0
+margin_right = 498.0
+margin_bottom = 175.0
+theme = ExtResource( 8 )
+text = "Button Pressed: "
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="Raw Label" type="Label" parent="Dev Label Container"]
+visible = false
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -499.0
+margin_top = 120.0
+margin_right = 498.0
+margin_bottom = 259.0
+theme = ExtResource( 8 )
+text = "Button Pressed: "
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="Axis Label" type="Label" parent="Dev Label Container"]
+visible = false
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -499.0
+margin_top = 197.0
+margin_right = 498.0
+margin_bottom = 336.0
+theme = ExtResource( 8 )
+text = "Button Pressed: "
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[connection signal="finished" from="AudioManager/SoundPlayer" to="AudioManager" method="_on_SoundPlayer_finished"]
+[connection signal="pressed" from="BetButton" to="InputManager" method="_on_BetButton_pressed"]
