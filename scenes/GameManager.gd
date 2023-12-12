@@ -35,21 +35,30 @@ var bet: int = 1
 
 var credit_image_limits: Array = [6, 11, 13]
 
+var payout_mult: Array = [5,5,5,5,10,10,10,1,1,1,1,1,1,1]
+var payout_static: Array = [
+	1,1,1,1,1,1,1,0,0,0,0,0,0,0,
+	2,2,2,2,2,2,2,25,40,50,100,200,0,0,
+	3,3,3,3,3,3,3,50,80,100,200,400,1000,2000
+	]
+
 # 1c min
+# 5x
+var lemon = preload("res://images/lemon.png")
+var melon = preload("res://images/melon.png")
+var horseshoe = preload("res://images/horseshoe.png")
+var heart = preload("res://images/heart.png")
+# 10x
 var bell = preload("res://images/bell.png")
 var cherry = preload("res://images/cherries.png")
 var clover = preload("res://images/clover.png")
-var horseshoe = preload("res://images/horseshoe.png")
-var heart = preload("res://images/heart.png")
-var lemon = preload("res://images/lemon.png")
-var melon = preload("res://images/melon.png")
 
 # 2c min
 var bar1 = preload("res://images/Bar1.png")
+var heart_outline = preload("res://images/heart_outline.png")
 var bar2= preload("res://images/Bar2.png")
 var bar3 = preload("res://images/Bar3.png")
 var lucky7 = preload("res://images/Lucky7.png")
-var heart_outline = preload("res://images/heart_outline.png")
 
 # 3c min
 var heart_rainbow = preload("res://images/heart_rainbow.png")
@@ -65,19 +74,19 @@ var wins: float = 0
 var win_target: float = 0.25
 
 func _ready():
+	images.push_back(lemon)
+	images.push_back(melon)
+	images.push_back(horseshoe)
+	images.push_back(heart)
 	images.push_back(bell)
 	images.push_back(cherry)
 	images.push_back(clover)
-	images.push_back(horseshoe)
-	images.push_back(heart)
-	images.push_back(lemon)
-	images.push_back(melon)
 	
 	images.push_back(bar1)
+	images.push_back(heart_outline)
 	images.push_back(bar2)
 	images.push_back(bar3)
 	images.push_back(lucky7)
-	images.push_back(heart_outline)
 	
 	images.push_back(heart_rainbow)
 	images.push_back(lucky7_rainbow)
@@ -133,11 +142,12 @@ func start_spin(fix: bool):
 		m_stop = false
 		r_stop = false
 		if fix:
-			emit_signal("spinning", fix, 13)
+			emit_signal("spinning", fix, 0)
 		else:
 			emit_signal("spinning", should_fix(), randi() % credit_image_limits[bet - 1])
 		spin_time = rand_range(2.0, 4.0)
 		pulls += 1
+		SignalBus.emit_signal("bet_placed", bet)
 
 
 func stop():
@@ -153,8 +163,14 @@ func check_win():
 			emit_signal("win", win_type.BIG)
 		else:
 			emit_signal("win", win_type.NORMAL)
+		calculate_win(l_idx)
 	emit_signal("stopped")
 
+
+func calculate_win(idx: int):
+	var winnings: int = payout_static[(bet-1) * images.size() + idx]
+	winnings *= payout_mult[idx]
+	SignalBus.emit_signal("won_credit", winnings)
 
 
 func check_stop():

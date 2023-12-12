@@ -98,9 +98,17 @@ margin_right = 422.0
 margin_bottom = 449.0
 theme = ExtResource( 8 )
 text = "Bet: 1"
-__meta__ = {
-"_edit_use_anchors_": true
-}
+
+[node name="Bank Label" type="Label" parent="."]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = 33.0
+margin_top = 21.0
+margin_right = 408.0
+margin_bottom = 243.0
+theme = ExtResource( 8 )
+text = "Total Bet: 
+Total Won: "
 
 [node name="Dev Label Container" type="Node" parent="."]
 
@@ -114,9 +122,6 @@ margin_right = 498.0
 margin_bottom = 175.0
 theme = ExtResource( 8 )
 text = "Button Pressed: "
-__meta__ = {
-"_edit_use_anchors_": true
-}
 
 [node name="Raw Label" type="Label" parent="Dev Label Container"]
 visible = false
@@ -128,9 +133,6 @@ margin_right = 498.0
 margin_bottom = 259.0
 theme = ExtResource( 8 )
 text = "Button Pressed: "
-__meta__ = {
-"_edit_use_anchors_": true
-}
 
 [node name="Axis Label" type="Label" parent="Dev Label Container"]
 visible = false
@@ -142,9 +144,6 @@ margin_right = 498.0
 margin_bottom = 336.0
 theme = ExtResource( 8 )
 text = "Button Pressed: "
-__meta__ = {
-"_edit_use_anchors_": true
-}
 
 [node name="Win Percent Label" type="Label" parent="Dev Label Container"]
 anchor_left = 1.0
