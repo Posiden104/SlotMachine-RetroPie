@@ -42,6 +42,8 @@ var payout_static: Array = [
 	3,3,3,3,3,3,3,50,80,100,200,400,1000,2000
 	]
 
+export(Array, Resource) var spinners
+
 # 1c min
 # 5x
 var lemon = preload("res://images/lemon.png")
@@ -120,6 +122,8 @@ func lock_wheel(lock: bool):
 
 
 func bet_changed():
+	if state != spinner_state.STOPPED:
+		return
 	bet = bet + 1
 	if bet > 3:
 		bet = 1
