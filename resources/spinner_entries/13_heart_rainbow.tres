@@ -6,7 +6,7 @@
 [resource]
 script = ExtResource( 2 )
 image = ExtResource( 1 )
-id = 0
+id = 13
 min_bet = 0
 payout_mult = 0
 payout_static = 0

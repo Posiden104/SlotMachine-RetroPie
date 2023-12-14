@@ -1,0 +1,19 @@
+[gd_resource type="Resource" load_steps=14 format=2]
+
+[ext_resource path="res://resources/spinner_entries/8_bar1.tres" type="Resource" id=1]
+[ext_resource path="res://resources/spinner_entries/6_cherry.tres" type="Resource" id=2]
+[ext_resource path="res://resources/spinner_entries/5_bell.tres" type="Resource" id=3]
+[ext_resource path="res://resources/spinner_entries/13_heart_rainbow.tres" type="Resource" id=4]
+[ext_resource path="res://resources/spinner_entries/1_lemon.tres" type="Resource" id=5]
+[ext_resource path="res://resources/spinner_entries/9_bar2.tres" type="Resource" id=6]
+[ext_resource path="res://resources/spinner_entries/2_mellon.tres" type="Resource" id=7]
+[ext_resource path="res://resources/spinner_entries/10_bar3.tres" type="Resource" id=8]
+[ext_resource path="res://resources/reel.gd" type="Script" id=9]
+[ext_resource path="res://resources/spinner_entries/7_clover.tres" type="Resource" id=10]
+[ext_resource path="res://resources/spinner_entries/3_horseshoe.tres" type="Resource" id=11]
+[ext_resource path="res://resources/spinner_entries/12_lucky7.tres" type="Resource" id=12]
+[ext_resource path="res://resources/spinner_entries/14_lucky7_rainbow.tres" type="Resource" id=13]
+
+[resource]
+script = ExtResource( 9 )
+spinner_entries = [ ExtResource( 5 ), ExtResource( 7 ), ExtResource( 11 ), ExtResource( 3 ), ExtResource( 2 ), ExtResource( 10 ), ExtResource( 1 ), ExtResource( 6 ), ExtResource( 8 ), ExtResource( 5 ), ExtResource( 7 ), ExtResource( 11 ), ExtResource( 3 ), ExtResource( 2 ), ExtResource( 10 ), ExtResource( 12 ), ExtResource( 4 ), ExtResource( 13 ) ]

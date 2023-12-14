@@ -42,7 +42,8 @@ var payout_static: Array = [
 	3,3,3,3,3,3,3,50,80,100,200,400,1000,2000
 	]
 
-export(Array, Resource) var spinners
+export(Array, Resource) var reels
+export(Resource) var pt
 
 # 1c min
 # 5x
@@ -96,6 +97,8 @@ func _ready():
 	state = spinner_state.STOPPED
 	
 	SignalBus.connect("bet_changed", self, "bet_changed")
+	if pt:
+		print(pt.get_max_payout(1,1,1))
 
 
 func _physics_process(delta):

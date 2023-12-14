@@ -13,7 +13,7 @@
 [ext_resource path="res://scenes/AudioManager.gd" type="Script" id=11]
 [ext_resource path="res://scenes/Pay Table.tscn" type="PackedScene" id=12]
 [ext_resource path="res://scenes/GameManager.gd" type="Script" id=13]
-[ext_resource path="res://resources/lucky7.tres" type="Resource" id=14]
+[ext_resource path="res://resources/pay_tables/pay_table_1.tres" type="Resource" id=14]
 
 [sub_resource type="InputEventAction" id=1]
 action = "spin"
@@ -32,7 +32,7 @@ script = ExtResource( 10 )
 
 [node name="GameManager" type="Node2D" parent="."]
 script = ExtResource( 13 )
-spinners = [ ExtResource( 14 ) ]
+pt = ExtResource( 14 )
 
 [node name="InputManager" type="Node2D" parent="."]
 script = ExtResource( 9 )
