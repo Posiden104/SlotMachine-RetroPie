@@ -18,12 +18,11 @@ var big_win = preload("res://sounds/slots_bigwin_001.wav")
 var coin_drop_win = preload("res://sounds/slots_bigwin_002.wav")
 
 var state
-
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	GameManager.connect("spinning", self, "play_pull")
+	$"%GameManager".connect("spinning", self, "play_pull")
 #	GameManager.connect("stopped", self, "play_stop")
-	GameManager.connect("win", self, "play_win")
+	$"%GameManager".connect("win", self, "play_win")
 	
 	state = sound_playing.NOTHING
 
@@ -49,7 +48,7 @@ func play_pull(_fix: bool, _idx: int):
 
 func play_win(win_type):
 	state = sound_playing.WIN
-	GameManager.lock_wheel(true)
+	$"%GameManager".lock_wheel(true)
 	sound_player.stop()
 	match win_type:
 		game_manager.win_type.BIG:
@@ -66,7 +65,7 @@ func _on_SoundPlayer_finished():
 		sound_playing.SPIN:
 			pass
 		sound_playing.WIN:
-			GameManager.lock_wheel(false)
+			$"%GameManager".lock_wheel(false)
 			state = sound_playing.NOTHING
 		sound_playing.NOTHING:
 			pass

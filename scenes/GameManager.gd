@@ -11,7 +11,8 @@ signal win
 enum spinner_state {
 	STOPPED,
 	SPINNING,
-	STOPPING
+	STOPPING,
+	SIM
 }
 
 enum win_type {
@@ -42,7 +43,10 @@ var payout_static: Array = [
 	3,3,3,3,3,3,3,50,80,100,200,400,1000,2000
 	]
 
-export(Array, Resource) var reels
+onready var left = $"%Left"
+onready var middle = $"%Middle"
+onready var right = $"%Right"
+
 export(Resource) var pt
 
 # 1c min
@@ -76,6 +80,9 @@ var pulls: float = 0
 var wins: float = 0
 var win_target: float = 0.25
 
+var sim_max = 100000
+var sim_idx = 0
+
 func _ready():
 	images.push_back(lemon)
 	images.push_back(melon)
@@ -97,11 +104,8 @@ func _ready():
 	state = spinner_state.STOPPED
 	
 	SignalBus.connect("bet_changed", self, "bet_changed")
-	if pt:
-		print(pt.get_max_payout(1,1,1))
 
-
-func _physics_process(delta):
+func _process(delta):
 	if Input.is_action_just_pressed("fixit") and state == spinner_state.STOPPED and not locked:
 		fixed = true
 		start_spin(fixed)
@@ -111,6 +115,10 @@ func _physics_process(delta):
 	elif Input.is_action_just_pressed("spin") and state == spinner_state.STOPPED and not locked:
 		fixed = false
 		start_spin(fixed)
+	elif Input.is_action_just_pressed("Simulate") and not locked:
+		state = spinner_state.SIM
+		locked = true
+	
 	
 	if state == spinner_state.SPINNING:
 		pull_timer += delta
@@ -119,6 +127,13 @@ func _physics_process(delta):
 			emit_signal("stopping")
 			pull_timer = 0
 
+#func _physics_process(_delta):
+	if state == spinner_state.SIM and sim_idx < sim_max:
+		start_spin(false)
+		sim_idx += 1
+	if sim_idx == sim_max:
+		state = spinner_state.STOPPED
+		locked = false
 
 func lock_wheel(lock: bool):
 	locked = lock
@@ -144,17 +159,24 @@ func should_fix():
 
 
 func start_spin(fix: bool):
-		state = spinner_state.SPINNING
+#		state = spinner_state.SPINNING
+		SignalBus.emit_signal("bet_placed", bet)
+		pulls += 1
 		l_stop = false
 		m_stop = false
 		r_stop = false
 		if fix:
-			emit_signal("spinning", fix, 0)
+#			emit_signal("spinning", fix, 0)
+			l_idx = 1
+			m_idx = 1
+			r_idx = 1
 		else:
-			emit_signal("spinning", should_fix(), randi() % credit_image_limits[bet - 1])
-		spin_time = rand_range(2.0, 4.0)
-		pulls += 1
-		SignalBus.emit_signal("bet_placed", bet)
+#			emit_signal("spinning", should_fix(), randi() % credit_image_limits[bet - 1])
+#			spin_time = rand_range(2.0, 4.0)
+			l_idx = left.reel.get_random_entry()
+			m_idx = middle.reel.get_random_entry()
+			r_idx = right.reel.get_random_entry()
+		check_win()
 
 
 func stop():
@@ -163,15 +185,22 @@ func stop():
 
 
 func check_win():
-	if l_idx == m_idx and m_idx == r_idx:
+#	print("rolled %d - %d - %d" % [l_idx, m_idx, r_idx])
+#	print("Pay table pays -> %d" % pt.get_max_payout(l_idx, m_idx, r_idx))
+	var winnings = pt.get_max_payout(l_idx, m_idx, r_idx)
+	if winnings > 0:
 		wins += 1
-		emit_signal("stopped")
-		if l_idx == 13:
-			emit_signal("win", win_type.BIG)
-		else:
-			emit_signal("win", win_type.NORMAL)
-		calculate_win(l_idx)
-	emit_signal("stopped")
+		SignalBus.emit_signal("won_credit", winnings)
+	
+#	if l_idx == m_idx and m_idx == r_idx:
+#		wins += 1
+#		emit_signal("stopped")
+#		if l_idx == 13:
+#			emit_signal("win", win_type.BIG)
+#		else:
+#			emit_signal("win", win_type.NORMAL)
+#		calculate_win(l_idx)
+#	emit_signal("stopped")
 
 
 func calculate_win(idx: int):

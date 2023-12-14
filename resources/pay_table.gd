@@ -15,6 +15,7 @@ func _setup_local_to_scene():
 		var t = table_entry.new(entry, wild_id)
 		table.push_back(t)
 
+
 func get_max_payout(l: int, m: int, r: int) -> int:
 	var win = 0
 	for t in table:

@@ -4,7 +4,7 @@ class_name Spinner
 
 signal stopped
 
-
+export var reel: Resource
 export var seconds_for_each_image: float
 export var slow_target: float
 export var slow_speed: float
@@ -41,9 +41,9 @@ var current_db: float
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	GameManager.connect("spinning", self, "spin")
-	GameManager.connect("stopping", self, "stopping")
-		
+	$"%GameManager".connect("spinning", self, "spin")
+	$"%GameManager".connect("stopping", self, "stopping")
+	
 	current_image_time = seconds_for_each_image
 
 func spin(_fix: bool, idx: int):
@@ -61,14 +61,14 @@ func stopping():
 
 func stop():
 	if fix:
-		image.texture = GameManager.images[fix_idx]
+		image.texture = $"%GameManager".images[fix_idx]
 		image_idx = fix_idx
 	else:
 		image.texture = pick_image(true)
 	state = spinner_state.STOPPED
 #	print("%s, %d" % [pos, slowdown_steps])
 	emit_signal("stopped")
-	GameManager.spinner_stop(pos, image_idx)
+	$"%GameManager".spinner_stop(pos, image_idx)
 	sound_player.volume_db = initial_db
 	sound_player.stop()
 	sound_player.stream = stop_sound
@@ -94,5 +94,5 @@ func _physics_process(delta):
 
 
 func pick_image(is_final: bool):
-	image_idx = GameManager.pick_image_index(pos, is_final)
-	return GameManager.images[image_idx]
+	image_idx = $"%GameManager".pick_image_index(pos, is_final)
+	return $"%GameManager".images[image_idx]
