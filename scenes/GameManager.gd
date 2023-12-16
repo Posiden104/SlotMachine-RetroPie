@@ -167,15 +167,18 @@ func start_spin(fix: bool):
 		r_stop = false
 		if fix:
 #			emit_signal("spinning", fix, 0)
-			l_idx = 1
-			m_idx = 1
-			r_idx = 1
+			l_idx = 14
+			m_idx = 14
+			r_idx = 14
 		else:
 #			emit_signal("spinning", should_fix(), randi() % credit_image_limits[bet - 1])
 #			spin_time = rand_range(2.0, 4.0)
 			l_idx = left.reel.get_random_entry()
 			m_idx = middle.reel.get_random_entry()
 			r_idx = right.reel.get_random_entry()
+		left.set_image(l_idx)
+		middle.set_image(m_idx)
+		right.set_image(r_idx)
 		check_win()
 
 

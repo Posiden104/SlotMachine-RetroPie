@@ -96,3 +96,7 @@ func _physics_process(delta):
 func pick_image(is_final: bool):
 	image_idx = $"%GameManager".pick_image_index(pos, is_final)
 	return $"%GameManager".images[image_idx]
+
+
+func set_image(i: int):
+	image.texture = reel.get_image(i)

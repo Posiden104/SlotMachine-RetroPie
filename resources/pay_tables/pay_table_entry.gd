@@ -19,6 +19,12 @@ func _init(lmrp: String, _wild: int):
 #	print("%d - %d - %d: pays %d with wild %d" %[l, m, r, payout, wild])
 
 func get_win(_l,_m,_r) -> int:
-	if l == _l and m == _m and r == _r:
+#	print("%d-%d, %d-%d, %d-%d, wild: %d" % [_l, l, _m, m, _r, r, wild])
+	if \
+	(l == _l or _l == wild) \
+	and \
+	(m == _m or _m == wild) \
+	and \
+	(r == _r or _r == wild):
 		return payout
 	return 0
